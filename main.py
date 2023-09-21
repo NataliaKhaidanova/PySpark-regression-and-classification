@@ -2,7 +2,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import round
 from pyspark.sql.functions import when
 from pyspark.ml.feature import StringIndexer 
-from pyspark.ml.feature import OneHotEncoder
 from pyspark.ml.feature import VectorAssembler
 
 # Create SparkSession object
@@ -11,6 +10,7 @@ spark = SparkSession.builder \
                     .appName('flight_delay') \
                     .getOrCreate()
                     
+# DATA PREPARATION
 flights = spark.read.csv('flights-larger.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
 
 print('The data contains %d records.' % flights.count())
@@ -34,18 +34,14 @@ flights = flights.withColumn('label', (when (flights.delay >= 15, 1)
 .otherwise (0)).cast('integer'))
 
 # Create an indexer, create a new column with numeric index values for string data
-flights = StringIndexer(inputCol='carrier', outputCol='carrier_idx').fit(flights).transform(flights)
-flights = StringIndexer(inputCol='org', outputCol='org_idx').fit(flights).transform(flights)
-flights.show(5)
+flights_indexed = StringIndexer(inputCol='carrier', outputCol='carrier_idx').fit(flights).transform(flights)
+flights_indexed = StringIndexer(inputCol='org', outputCol='org_idx').fit(flights_indexed).transform(flights_indexed)
+flights_indexed.show(5)
 
-# Create an instance of the one hot encoder
-onehot = OneHotEncoder(inputCols=['carrier_idx','org_idx'], outputCols=['carrier_dummy','org_dummy'])
-
-# Apply the one hot encoder to the flights data
-onehot = onehot.fit(flights)
-onehot = onehot.transform(flights)
-
-# Check the results
-onehot.select('org', 'org_idx', 'org_dummy').distinct().orderBy('org_idx').show()
-onehot.select('carrier', 'carrier_idx', 'carrier_dummy').distinct().orderBy('carrier_idx').show()
+# Create an assembler object
+assembler = VectorAssembler(inputCols=['mon','dom','dow','carrier_idx','org_idx','km','depart','duration'], outputCol='features')
+# Consolidate predictor columns
+flights_assembled = assembler.transform(flights_indexed)
+# Check the resulting column
+flights_assembled.select('features', 'delay').show(5, truncate=False)
 
