@@ -1,4 +1,4 @@
-Column description in lights-larger.csv:
+Column description in flights-larger.csv:
 
 - mon — month (integer between 1 and 12)
 - dom — day of month (integer between 1 and 31)
