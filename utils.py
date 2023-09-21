@@ -53,6 +53,6 @@ def train_test_split():
 
     # Check that training set has around 80% of records
     training_ratio = flights_train.count() / flights_assembled.count()
-    print('Training ratio to the whole data: %d.' % training_ratio)
+    print('Training ratio to the whole data: {}.' .format(training_ratio))
     
     return flights_train, flights_test
