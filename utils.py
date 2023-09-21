@@ -7,7 +7,7 @@ from pyspark.ml.feature import VectorAssembler
 # Create SparkSession object
 spark = SparkSession.builder \
                     .master('local[*]') \
-                    .appName('flight_delay') \
+                    .appName('flight') \
                     .getOrCreate()
                     
 # DATA PREPARATION
