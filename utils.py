@@ -1,8 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import round
-from pyspark.sql.functions import when
-from pyspark.ml.feature import StringIndexer 
-from pyspark.ml.feature import VectorAssembler
+from pyspark.sql.functions import round, when
+from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler, Bucketizer
 
 # Create SparkSession object
 spark = SparkSession.builder \
@@ -11,7 +9,7 @@ spark = SparkSession.builder \
                     .getOrCreate()
                     
 # DATA PREPARATION
-def train_test_split():
+def train_test_split(task):
     """
     """
     flights = spark.read.csv('flights.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
@@ -40,11 +38,35 @@ def train_test_split():
     flights_indexed = StringIndexer(inputCol='carrier', outputCol='carrier_idx').fit(flights).transform(flights)
     flights_indexed = StringIndexer(inputCol='org', outputCol='org_idx').fit(flights_indexed).transform(flights_indexed)
     flights_indexed.show(5)
+    
+    # Create buckets at 3 hour intervals through the day
+    buckets = Bucketizer(splits=[0,3,6,9,12,15,18,21,24], inputCol='depart', outputCol='depart_bucket')
+
+    # Bucket the departure times
+    bucketed = buckets.transform(flights_indexed)
+    #bucketed.select('depart', 'depart_bucket').show(5)
+
+    # Create an instance of the one hot encoder
+    onehot = OneHotEncoder(inputCols=['depart_bucket','carrier_idx','org_idx'], 
+                           outputCols=['depart_dummy','carrier_dummy','org_dummy'])
+
+    # One-hot encode the bucketed departure times
+    flights_onehot = onehot.fit(bucketed).transform(bucketed)
+
+    # Check the results
+    #flights_onehot.select('depart', 'depart_bucket', 'depart_dummy').show(5)
+    #flights_onehot.select('org', 'org_idx', 'org_dummy').distinct().orderBy('org_idx').show(5)
+    #flights_onehot.select('carrier', 'carrier_idx', 'carrier_dummy').distinct().orderBy('carrier_idx').show(5)
 
     # Create an assembler object
-    assembler = VectorAssembler(inputCols=['mon','dom','dow','carrier_idx','org_idx','km','depart','duration'], outputCol='features')
-    # Consolidate predictor columns
-    flights_assembled = assembler.transform(flights_indexed)
+    if task == 'classification':
+        assembler = VectorAssembler(inputCols=['mon','dom','dow','carrier_idx','org_idx','km','depart','duration'], outputCol='features')
+        # Consolidate predictor columns
+        flights_assembled = assembler.transform(flights_indexed)
+    else:
+        assembler = VectorAssembler(inputCols=['mon','dom','dow','carrier_dummy','org_dummy','km','depart','duration'], outputCol='features')
+        flights_assembled = assembler.transform(flights_onehot)
+        
     # Check the resulting column
     flights_assembled.select('features', 'delay').show(5, truncate=False)
     
