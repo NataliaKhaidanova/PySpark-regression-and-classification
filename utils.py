@@ -14,7 +14,7 @@ spark = SparkSession.builder \
 def train_test_split():
     """
     """
-    flights = spark.read.csv('flights-larger.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
+    flights = spark.read.csv('flights.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
 
     print('The data contains %d records.' % flights.count())
 
