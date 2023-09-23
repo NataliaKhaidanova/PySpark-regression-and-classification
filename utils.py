@@ -52,7 +52,7 @@ def train_test_split():
     flights_train, flights_test = flights_assembled.randomSplit([0.8, 0.2], seed=43)
 
     # Check that training set has around 80% of records
-    training_ratio = flights_train.count() / flights_assembled.count()
-    print('Training ratio to the whole data: {}.' .format(training_ratio))
+    #training_ratio = flights_train.count() / flights_assembled.count()
+    #print('Training ratio to the whole data: {}.' .format(training_ratio))
     
     return flights_train, flights_test
