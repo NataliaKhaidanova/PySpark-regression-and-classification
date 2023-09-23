@@ -2,7 +2,7 @@ from pyspark.ml.classification import LogisticRegression
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator, BinaryClassificationEvaluator
 from utils import *
 
-flights_train, flights_test = train_test_split()
+flights_train, flights_test = train_test_split('classification')
 
 # Create a classifier object and train on training data
 logistic = LogisticRegression().fit(flights_train)
