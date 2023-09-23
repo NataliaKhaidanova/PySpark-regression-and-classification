@@ -9,7 +9,7 @@ logistic = LogisticRegression().fit(flights_train)
 
 # Create predictions for the testing data and show confusion matrix
 prediction = logistic.transform(flights_test)
-prediction.groupBy('label', 'prediction').count().show()
+#prediction.groupBy('label', 'prediction').count().show()
 
 # Calculate the elements of the confusion matrix
 TN = prediction.filter('prediction = 0 AND label = prediction').count()
