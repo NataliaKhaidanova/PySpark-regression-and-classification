@@ -4,17 +4,20 @@ from utils import *
 
 flights_train, flights_test = train_test_split('regression')
 
-for model in ['default', 'Lasso']: # default = Ridge-like
+for model in ['default', 'Lasso', 'Ridge']: #default = Ridge-like
     if model == 'default':
         # Create a regression object and train on training data
         regression = LinearRegression(labelCol='duration').fit(flights_train)
-    else:
+    if model == 'Lasso':
         # Fit Lasso model (λ = 1, α = 1) to training data
         regression = LinearRegression(labelCol='duration', regParam=1, elasticNetParam=1).fit(flights_train)
+    else:
+        # Fit Ridge model (λ = 0, α = 0) to training data
+        regression = LinearRegression(labelCol='duration', regParam=0, elasticNetParam=0).fit(flights_train)
 
     # Create predictions for the testing data and take a look at the predictions
     predictions = regression.transform(flights_test)
-    #predictions.select('duration', 'prediction').show(5, False) 
+    #predictions.select('duration', 'prediction').show(5, False)
 
     # Calculate the RMSE on testing data
     rmse = RegressionEvaluator(labelCol='duration').evaluate(predictions)
