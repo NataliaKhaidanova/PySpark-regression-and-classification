@@ -88,7 +88,7 @@ def linear_regression(flights_train, flights_test):
     print('RMSE of the best model = {}' .format(evaluator.evaluate(predictions)))
 
     zero_coeff = len([beta for beta in best_model.coefficients if beta == 0])
-    print("Number of coefficients equal to 0: {}\n" .format(int(zero_coeff)))
+    print('Number of coefficients equal to 0: {}\n' .format(int(zero_coeff)))
 
     # RESULT:
     # RMSE of the best model = 7.671071994215025e-14
