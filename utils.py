@@ -5,14 +5,15 @@ from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler, Bu
 # Create SparkSession object
 spark = SparkSession.builder \
                     .master('local[*]') \
-                    .appName('flight') \
+                    .appName('flights') \
                     .getOrCreate()
                     
-# DATA PREPARATION
+# PREPARE THE DATA 
 def train_test_split(task):
     """
     """
-    flights = spark.read.csv('flights.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
+        
+    flights = spark.read.csv('Data/flights.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
 
     print('The data contains %d records.' % flights.count())
 
@@ -28,7 +29,7 @@ def train_test_split(task):
 
     # Convert "mile" to "km" and drop "mile" column (1 mile is equivalent to 1.60934 km)
     flights = flights.withColumn('km', round(flights.mile * 1.60934, 0)) \
-                     .drop('mile')
+                    .drop('mile')
 
     # Create "label" column indicating whether flight was delayed (1) or not (0)
     flights = flights.withColumn('label', (when (flights.delay >= 15, 1)
@@ -48,7 +49,7 @@ def train_test_split(task):
 
     # Create an instance of the one hot encoder
     onehot = OneHotEncoder(inputCols=['depart_bucket','carrier_idx','org_idx'], 
-                           outputCols=['depart_dummy','carrier_dummy','org_dummy'])
+                          outputCols=['depart_dummy','carrier_dummy','org_dummy'])
 
     # One-hot encode the bucketed departure times
     flights_onehot = onehot.fit(bucketed).transform(bucketed)
@@ -69,6 +70,7 @@ def train_test_split(task):
         
     # Check the resulting column
     flights_assembled.select('features', 'delay').show(5, truncate=False)
+    print('=====================================')
     
     # Split into training and testing sets in a 80:20 ratio
     flights_train, flights_test = flights_assembled.randomSplit([0.8, 0.2], seed=43)
