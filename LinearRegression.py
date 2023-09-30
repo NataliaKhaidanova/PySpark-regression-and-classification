@@ -31,14 +31,14 @@ def linear_regression(flights_train, flights_test):
 
         # Create predictions for the testing data 
         predictions = regression.transform(flights_test)
-        # predictions.select('duration', 'prediction').show(5, False) # Take a look at the predictions
+        #predictions.select('duration', 'prediction').show(5, False) # Take a look at the predictions
 
         # Calculate the RMSE on test data
         rmse = RegressionEvaluator(labelCol='duration').evaluate(predictions)
         print('RMSE of the {} model = {}' .format(model, rmse))
 
         zero_coeff = len([beta for beta in regression.coefficients if beta == 0])
-        print("Number of coefficients equal to 0: {}\n" .format(int(zero_coeff)))
+        print('Number of coefficients equal to 0: {}\n' .format(int(zero_coeff)))
 
     # RESULT:    
     # RMSE of the default model = 9.178962994062984e-13
@@ -70,7 +70,7 @@ def linear_regression(flights_train, flights_test):
 
     # Extract the best model 
     best_model = cv.bestModel
-    best_model.save('models')
+    best_model.save('models/LinearRegression')
 
     # Look at the hyperparameters in the best model
     print('Best Param (maxIter):', best_model.getMaxIter(), best_model.explainParam('maxIter'))
