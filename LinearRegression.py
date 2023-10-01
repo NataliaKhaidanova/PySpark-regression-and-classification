@@ -85,7 +85,7 @@ def linear_regression(flights_train, flights_test):
     # Best Param (fitIntercept): False (default: True, current: False)
 
     predictions = best_model.transform(flights_test)
-    print('RMSE of the best model = {}' .format(evaluator.evaluate(predictions)))
+    print('\nRMSE of the best model = {}' .format(evaluator.evaluate(predictions)))
 
     zero_coeff = len([beta for beta in best_model.coefficients if beta == 0])
     print('Number of coefficients equal to 0: {}\n' .format(int(zero_coeff)))
