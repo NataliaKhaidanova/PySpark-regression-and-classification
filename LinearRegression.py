@@ -13,7 +13,7 @@ def linear_regression(flights_train, flights_test):
     Train and test (using RMSE) LinearRegression model,
     Compare the default model to its Lasso and Ridge versions,
     Perform hyperparameter tuning and cross-validation, 
-    Evaluate and save the best model. 
+    Evaluate the best model. 
     
     :param list flights_train: list of training data with features 
     :param list flights_test: list of test data with features 
