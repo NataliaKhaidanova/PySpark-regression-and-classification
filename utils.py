@@ -3,6 +3,7 @@ from pyspark.sql.functions import round, when
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler, Bucketizer
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator, BinaryClassificationEvaluator
 
+
 # Create SparkSession object
 spark = SparkSession.builder \
                     .master('local[*]') \
