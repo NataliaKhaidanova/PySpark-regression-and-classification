@@ -11,6 +11,11 @@ spark = SparkSession.builder \
 # PREPARE THE DATA 
 def train_test_split(task):
     """
+    Preprocess the data, 
+    Split the data into training and testing sets for classification and regression tasks. 
+
+    :param string task: the task to split the data for ('classification' or 'regression') 
+    :return: two lists: training and testing data 
     """
         
     flights = spark.read.csv('Data/flights.csv', sep=',', header=True, inferSchema=True, nullValue='NA')
@@ -29,7 +34,7 @@ def train_test_split(task):
 
     # Convert "mile" to "km" and drop "mile" column (1 mile is equivalent to 1.60934 km)
     flights = flights.withColumn('km', round(flights.mile * 1.60934, 0)) \
-                    .drop('mile')
+                     .drop('mile')
 
     # Create "label" column indicating whether flight was delayed (1) or not (0)
     flights = flights.withColumn('label', (when (flights.delay >= 15, 1)
@@ -49,7 +54,7 @@ def train_test_split(task):
 
     # Create an instance of the one hot encoder
     onehot = OneHotEncoder(inputCols=['depart_bucket','carrier_idx','org_idx'], 
-                          outputCols=['depart_dummy','carrier_dummy','org_dummy'])
+                           outputCols=['depart_dummy','carrier_dummy','org_dummy'])
 
     # One-hot encode the bucketed departure times
     flights_onehot = onehot.fit(bucketed).transform(bucketed)
