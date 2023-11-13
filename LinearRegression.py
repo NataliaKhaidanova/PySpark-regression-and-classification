@@ -6,7 +6,9 @@ from pyspark.ml.tuning import ParamGridBuilder
 from pyspark.ml.tuning import CrossValidator
 from utils import *
 
+
 flights_train, flights_test = train_test_split('regression')
+
 
 def linear_regression(flights_train, flights_test):
     """
@@ -95,3 +97,7 @@ def linear_regression(flights_train, flights_test):
     # RESULT:
     # RMSE of the best model = 7.671071994215025e-14
     # Number of coefficients equal to 0: 0
+
+
+if __name__ == '__main__':
+    linear_regression(flights_train, flights_test)
