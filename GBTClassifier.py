@@ -1,3 +1,5 @@
+# Classification - AUC
+# GBT Classifier with cross-validation and hyperparameter tuning 
 from pyspark.ml.classification import GBTClassifier
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 from pyspark.ml.tuning import ParamGridBuilder
