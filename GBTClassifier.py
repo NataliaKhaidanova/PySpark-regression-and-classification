@@ -10,7 +10,7 @@ def GBT_classifier(flights_train, flights_test):
     """
     Train and test (using AUC) GBTClassifier model,
     Perform hyperparameter tuning and cross-validation, 
-    Evaluate and save the best model,
+    Evaluate the best model,
     Compare the default model to the best model. 
     
     :param list flights_train: list of training data with features 
