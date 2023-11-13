@@ -69,7 +69,7 @@ def GBT_classifier(flights_train, flights_test):
     # Best Param (maxBins): 32 (default: 32)
     # Best Param (maxIter): 20 (default: 20)
     # Best Param (stepSize): 0.1 (default: 0.1)
-    # Best Param (impurity): variance impurity (default: variance)
+    # Best Param (impurity): variance (default: variance)
 
     predictions = best_model.transform(flights_test)
     print('\nAUC of the best GBTClassifier = {}\n' .format(evaluator.evaluate(predictions)))
