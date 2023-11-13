@@ -2,12 +2,14 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import round, when
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler, Bucketizer
 
+
 # Create SparkSession object
 spark = SparkSession.builder \
                     .master('local[*]') \
                     .appName('flights') \
                     .getOrCreate()
-                    
+
+
 # PREPARE THE DATA 
 def train_test_split(task):
     """
