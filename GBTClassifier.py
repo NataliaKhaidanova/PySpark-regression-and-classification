@@ -6,7 +6,9 @@ from pyspark.ml.tuning import ParamGridBuilder
 from pyspark.ml.tuning import CrossValidator
 from utils import *
 
+
 flights_train, flights_test = train_test_split('classification')
+
 
 def GBT_classifier(flights_train, flights_test):
     """
@@ -80,3 +82,7 @@ def GBT_classifier(flights_train, flights_test):
 
     # RESULT:
     # AUC of the best GBTClassifier = 0.7267226346255101
+
+
+if __name__ == '__main__':
+    GBT_classifier(flights_train, flights_test)
