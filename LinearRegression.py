@@ -81,7 +81,7 @@ def linear_regression(flights_train, flights_test):
     print('Best Param (regParam):', best_model.getRegParam(), best_model.explainParam('regParam'))
     print('Best Param (elasticNetParam):', best_model.getElasticNetParam(), best_model.explainParam('elasticNetParam'))
     print('Best Param (fitIntercept):', best_model.getFitIntercept(), best_model.explainParam('fitIntercept'))
-
+ 
     # RESULT: 
     # Best Param (maxIter): 650 (default: 100, current: 650)
     # Best Param (regParam): 0.0 (default: 0.0, current: 0.0)
